@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bé Luyện Toán Lớp 2</title>
+    <!-- Tailwind CSS for utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 min-h-screen text-slate-800 flex flex-col items-center justify-between p-3 sm:p-6 overflow-x-hidden">
+
+    <header class="w-full max-w-md flex items-center justify-between mb-4 bg-white/80 backdrop-blur-md px-4 py-3 rounded-2xl shadow-sm border border-purple-100">
+        <button id="home-btn" onclick="confirmGoHome()" class="hidden text-xs sm:text-sm bg-purple-100 text-purple-700 font-bold px-3 py-2 rounded-xl shadow-sm hover:bg-purple-200 transition active:scale-95 flex items-center gap-1">
+            🏠 Trang chủ
+        </button>
+        <div class="flex items-center gap-2 mx-auto sm:mx-0">
+            <span class="text-2xl">🧮</span>
+            <h1 class="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Toán Vui Lớp 2</h1>
+        </div>
+        <button id="sound-toggle-btn" onclick="toggleSound()" class="text-xl bg-purple-100 hover:bg-purple-200 p-2 rounded-xl shadow-sm transition active:scale-95" title="Bật/Tắt âm thanh">
+            🔊
+        </button>
+    </header>
+
+    <main class="w-full max-w-md flex-1 flex flex-col items-center justify-center relative pb-6">
+
+        <!-- VIEW 1: HOME SCREEN -->
+        <div id="view-home" class="w-full flex flex-col gap-5 items-center animate-fade-in">
+            <div class="text-center mb-2">
+                <h2 class="text-2xl sm:text-3xl font-bold text-purple-800 mb-1">Chọn trò chơi bé nhé! 🌟</h2>
+                <p class="text-sm sm:text-base text-slate-600">Luyện tập thông minh, vui mỗi ngày</p>
+            </div>
+
+            <!-- Card 1: Addition -->
+            <div onclick="startPractice('addition')" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-3xl p-6 shadow-lg text-white cursor-pointer card-hover transition transform border-4 border-amber-200/50 flex flex-col items-center relative overflow-hidden group">
+                <div class="absolute -right-6 -bottom-6 text-7xl opacity-20 group-hover:scale-110 transition">➕</div>
+                <div class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">Cộng qua 10</div>
+                <h3 class="text-3xl font-bold mb-1">🌟 TẬP CỘNG</h3>
+                <p class="text-amber-100 text-sm mb-4 text-center">Luyện thành thạo phép cộng qua 10 trong phạm vi 20</p>
+                <div class="bg-white text-orange-600 font-bold px-6 py-3 rounded-2xl shadow-md text-base sm:text-lg flex items-center gap-2 group-hover:bg-amber-50 transition">
+                    [ BẮT ĐẦU ] 🚀
+                </div>
+            </div>
+
+            <!-- Card 2: Subtraction -->
+            <div onclick="startPractice('subtraction')" class="w-full bg-gradient-to-r from-sky-400 to-blue-600 rounded-3xl p-6 shadow-lg text-white cursor-pointer card-hover transition transform border-4 border-sky-200/50 flex flex-col items-center relative overflow-hidden group">
+                <div class="absolute -right-6 -bottom-6 text-7xl opacity-20 group-hover:scale-110 transition">➖</div>
+                <div class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">Trừ có nhớ</div>
+                <h3 class="text-3xl font-bold mb-1">➖ TẬP TRỪ</h3>
+                <p class="text-sky-100 text-sm mb-4 text-center">Luyện thành thạo phép trừ có nhớ trong phạm vi 20</p>
+                <div class="bg-white text-blue-600 font-bold px-6 py-3 rounded-2xl shadow-md text-base sm:text-lg flex items-center gap-2 group-hover:bg-sky-50 transition">
+                    [ BẮT ĐẦU ] 🚀
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: PRACTICE GAME SCREEN -->
+        <div id="view-game" class="w-full flex-col items-center hidden">
+            <!-- Mode Header & Stats -->
+            <div class="w-full flex items-center justify-between mb-4 bg-white px-4 py-2.5 rounded-2xl shadow-sm border border-slate-100">
+                <div id="game-mode-badge" class="font-bold text-sm sm:text-base flex items-center gap-1.5 px-3 py-1 rounded-xl bg-orange-100 text-orange-700">
+                    🌟 TẬP CỘNG
+                </div>
+                <div class="flex items-center gap-3 text-sm sm:text-base font-bold">
+                    <span class="text-amber-500 flex items-center gap-1">⭐ Điểm: <span id="score-display">0</span></span>
+                    <span class="text-slate-400">|</span>
+                    <span class="text-purple-600">Câu <span id="current-q-num">1</span>/10</span>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="w-full bg-white rounded-3xl p-6 shadow-xl border border-purple-50 flex flex-col items-center mb-4 relative overflow-hidden">
+                <div class="absolute top-2 left-3 text-lg opacity-30">🎈</div>
+                <div class="absolute top-2 right-3 text-lg opacity-30">✨</div>
+
+                <!-- Equation Display -->
+                <div class="text-4xl sm:text-5xl font-extrabold tracking-wider text-purple-900 my-4 flex items-center justify-center gap-3">
+                    <span id="problem-text">8 + 5</span>
+                    <span class="text-purple-400">=</span>
+                    <span id="user-answer-display" class="min-w-[80px] px-4 py-1 bg-purple-50 border-3 border-dashed border-purple-300 rounded-2xl text-purple-700 text-center inline-block">?</span>
+                </div>
+
+                <!-- Feedback & Controls wrapper -->
+                <div id="feedback-container" class="w-full min-h-[50px] flex items-center justify-center mb-2">
+                    <span id="feedback-text" class="text-base sm:text-lg font-semibold text-slate-500">Hãy nhập đáp án bên dưới nhé!</span>
+                </div>
+
+                <!-- Action buttons after answer (Next / Retry / Hint) -->
+                <div id="action-buttons-container" class="w-full flex gap-2 justify-center hidden mt-1">
+                    <button id="btn-retry" onclick="retryQuestion()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition active:scale-95 text-sm sm:text-base">
+                        🔄 THỬ LẠI
+                    </button>
+                    <button id="btn-hint" onclick="showHintModal()" class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition active:scale-95 text-sm sm:text-base flex items-center justify-center gap-1">
+                        💡 GỢI Ý
+                    </button>
+                    <button id="btn-next" onclick="nextQuestion()" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition active:scale-95 text-sm sm:text-base hidden">
+                        CÂU TIẾP ➜
+                    </button>
+                </div>
+            </div>
+
+            <!-- Number Keypad (Optimized for Kids & Touch) -->
+            <div id="keypad-container" class="w-full bg-white/90 backdrop-blur-sm p-4 rounded-3xl shadow-lg border border-purple-100 grid grid-cols-3 gap-2.5 max-w-sm">
+                <button onclick="appendNumber('1')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">1</button>
+                <button onclick="appendNumber('2')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">2</button>
+                <button onclick="appendNumber('3')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">3</button>
+                
+                <button onclick="appendNumber('4')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">4</button>
+                <button onclick="appendNumber('5')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">5</button>
+                <button onclick="appendNumber('6')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">6</button>
+                
+                <button onclick="appendNumber('7')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">7</button>
+                <button onclick="appendNumber('8')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">8</button>
+                <button onclick="appendNumber('9')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">9</button>
+                
+                <button onclick="deleteNumber()" class="bg-rose-50 hover:bg-rose-100 active:bg-rose-200 text-rose-700 text-xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95 flex items-center justify-center">⌫</button>
+                <button onclick="appendNumber('0')" class="bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 text-2xl font-bold py-3.5 rounded-2xl shadow-sm transition active:scale-95">0</button>
+                <button onclick="submitAnswer()" class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white text-2xl font-bold py-3.5 rounded-2xl shadow-md transition active:scale-95 flex items-center justify-center">✓</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: SUMMARY SCREEN (After 10 questions) -->
+        <div id="view-summary" class="w-full flex-col items-center text-center hidden animate-fade-in">
+            <div class="w-full bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-purple-100 flex flex-col items-center">
+                <div class="text-6xl mb-3 animate-bounce-gentle">🎉</div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-purple-800 mb-1">HOAN HÔ!</h2>
+                <p class="text-slate-600 text-sm sm:text-base mb-6">Con đã hoàn thành xuất sắc lượt luyện tập!</p>
+
+                <!-- Score Board Details -->
+                <div class="w-full bg-purple-50 rounded-2xl p-4 mb-6 flex flex-col gap-3 border border-purple-100">
+                    <div class="flex items-center justify-between text-base sm:text-lg font-semibold text-slate-700">
+                        <span>⭐ Tổng điểm:</span>
+                        <span id="final-score" class="text-amber-500 font-bold text-xl">8/10</span>
+                    </div>
+                    <div class="flex items-center justify-between text-base sm:text-lg font-semibold text-slate-700">
+                        <span>😊 Số câu đúng:</span>
+                        <span id="final-correct-count" class="text-emerald-600 font-bold text-xl">8/10</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="w-full flex flex-col gap-3">
+                    <button onclick="restartCurrentMode()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition active:scale-95 text-base sm:text-lg flex items-center justify-center gap-2">
+                        🔄 BÀI MỚI
+                    </button>
+                    <button onclick="goHome()" class="w-full bg-purple-100 hover:bg-purple-200 text-purple-700 font-bold py-3.5 px-6 rounded-2xl shadow-sm transition active:scale-95 text-base sm:text-lg flex items-center justify-center gap-2">
+                        🏠 VỀ TRANG CHỦ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- HINT MODAL POPUP -->
+    <div id="hint-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-indigo-100 transform transition animate-scale-up relative">
+            <div class="flex items-center justify-between mb-3 border-b pb-2">
+                <h3 class="font-bold text-lg text-indigo-700 flex items-center gap-2">💡 Gợi Ý Cho Bé</h3>
+                <button onclick="closeHintModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold px-2">✕</button>
+            </div>
+            <div id="hint-content" class="text-slate-700 text-sm sm:text-base leading-relaxed space-y-2 mb-6">
+                <!-- Dynamic Hint Content -->
+            </div>
+            <button onclick="closeHintModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl shadow-md transition active:scale-95">
+                ĐÃ HIỂU 👍
+            </button>
+        </div>
+    </div>
+
+    <!-- CONFIRM GO HOME MODAL -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-purple-100 text-center">
+            <div class="text-4xl mb-2">🤔</div>
+            <h3 class="font-bold text-lg text-purple-900 mb-2">Kết thúc lượt luyện tập?</h3>
+            <p class="text-slate-600 text-sm mb-6">Con có muốn thoát về trang chủ không?</p>
+            <div class="flex gap-3">
+                <button onclick="closeConfirmModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-2xl transition active:scale-95">
+                    TIẾP TỤC
+                </button>
+                <button onclick="executeGoHome()" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-2xl shadow-md transition active:scale-95">
+                    THOÁT
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Script File -->
+    <script src="script.js"></script>
+</body>
+</html>
+
+

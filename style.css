@@ -1,0 +1,22 @@
+/* Custom styles and animations for Bé Luyện Toán Lớp 2 */
+body {
+    font-family: 'Fredoka', cursive, sans-serif;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Bounce animation for success icon */
+@keyframes bounce-gentle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.animate-bounce-gentle {
+    animation: bounce-gentle 1.5s infinite ease-in-out;
+}
+
+/* Card tap/active feedback */
+.card-hover:active {
+    transform: scale(0.97);
+}
